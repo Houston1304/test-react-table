@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import TableRowInterface from "../interfaces/TableRowInterface";
 
 interface TableState {
   data: any[];
@@ -12,7 +13,7 @@ const tableSlice = createSlice({
   name: "table",
   initialState,
   reducers: {
-    addRecord: (state, action: PayloadAction<any>) => {
+    addRecord: (state, action: PayloadAction<TableRowInterface>) => {
       state.data.push(action.payload);
     },
 
@@ -20,7 +21,7 @@ const tableSlice = createSlice({
       state.data = state.data.filter((record) => record.id !== action.payload);
     },
 
-    editRecord: (state, action: PayloadAction<any>) => {
+    editRecord: (state, action: PayloadAction<TableRowInterface>) => {
       const index = state.data.findIndex(
         (record) => record.id === action.payload.id
       );

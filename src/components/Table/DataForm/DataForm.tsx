@@ -1,15 +1,19 @@
-import React, { ChangeEvent, useEffect, useState } from "react";
-import "./AddDataFormStyle.css";
+import React, { useEffect, useState } from "react";
+import "./DataForm.css";
 import { TextField, Button, Container, Box } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs, { Dayjs } from "dayjs";
-import { addData } from "../../services/AddDataApi";
+import { addData } from "../../../services/AddDataApi";
+import TableRowInterface from "../../../interfaces/TableRowInterface";
+import { editData } from "../../../services/EditDataApi";
 import { useDispatch } from "react-redux";
-import { addRecord } from "../../reducers/TableSlice";
+import { editRecord, setData } from "../../../reducers/TableSlice";
+import { fetchTableData } from "../../../services/GetDataApi";
 
 interface FormData {
+  id?: string;
   companySigDate: Dayjs | null;
   companySignatureName: string;
   documentName: string;
@@ -24,18 +28,43 @@ interface FormErrors {
   [key: string]: boolean;
 }
 
-function AddDataForm({ close }: { close: (arg: boolean) => void }) {
+function DataForm({
+  formType,
+  changeData,
+  close,
+}: {
+  formType: string;
+  changeData?: TableRowInterface;
+  close: (arg: boolean) => void;
+}) {
   const dispatch = useDispatch();
-  const [formData, setFormData] = useState<FormData>({
-    companySigDate: null,
-    companySignatureName: "",
-    documentName: "",
-    documentStatus: "",
-    documentType: "",
-    employeeNumber: "",
-    employeeSigDate: null,
-    employeeSignatureName: "",
-  });
+  const [formData, setFormData] = useState<FormData>(
+    formType === "add"
+      ? {
+          companySigDate: null,
+          companySignatureName: "",
+          documentName: "",
+          documentStatus: "",
+          documentType: "",
+          employeeNumber: "",
+          employeeSigDate: null,
+          employeeSignatureName: "",
+        }
+      : {
+          id: changeData?.id || "",
+          companySigDate: changeData ? dayjs(changeData.companySigDate) : null,
+          companySignatureName: changeData?.companySignatureName || "",
+          documentName: changeData?.documentName || "",
+          documentStatus: changeData?.documentStatus || "",
+          documentType: changeData?.documentType || "",
+          employeeNumber: changeData?.employeeNumber || "",
+          employeeSigDate: changeData
+            ? dayjs(changeData.employeeSigDate)
+            : null,
+          employeeSignatureName: changeData?.employeeSignatureName || "",
+        }
+  );
+
   const [errors, setErrors] = useState<FormErrors>({});
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -75,16 +104,25 @@ function AddDataForm({ close }: { close: (arg: boolean) => void }) {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (validateForm()) {
-      const submissionData = {
-        ...formData,
-        companySigDate: formData.companySigDate?.toISOString(),
-        employeeSigDate: formData.employeeSigDate?.toISOString(),
-      };
-      await addData(submissionData);
+    if (!validateForm()) return;
 
-      dispatch(addRecord(submissionData));
-    }
+    const submissionData = {
+      ...formData,
+      companySigDate: formData.companySigDate?.toISOString(),
+      employeeSigDate: formData.employeeSigDate?.toISOString(),
+    };
+    try {
+      if (formType === "add") {
+        await addData(submissionData);
+
+        const tableData = await fetchTableData();
+        dispatch(setData(tableData));
+      } else if (formData.id) {
+        await editData(formData.id, submissionData);
+        dispatch(editRecord({ ...submissionData, id: formData.id }));
+      }
+      close(false);
+    } catch {}
   };
 
   useEffect(() => {
@@ -213,4 +251,4 @@ function AddDataForm({ close }: { close: (arg: boolean) => void }) {
   );
 }
 
-export default AddDataForm;
+export default DataForm;

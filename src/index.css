@@ -29,3 +29,9 @@ code {
   overflow: hidden;
   z-index: 4;
 }
+
+.exitContainer {
+  display: flex;
+  justify-content: flex-end;
+  padding: 10px;
+}
