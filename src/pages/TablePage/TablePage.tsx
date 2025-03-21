@@ -38,6 +38,7 @@ function TablePage() {
     const loadData = async () => {
       try {
         const tableData = await fetchTableData();
+
         dispatch(setData(tableData));
       } catch (err) {
         setError("Не удалось загрузить данные");
@@ -70,7 +71,6 @@ function TablePage() {
           Выход
         </Button>
       </div>
-      {error && <Typography color="error">{error}</Typography>}
       <TableContainer component={Paper} className="tableContainer">
         <Table size="small" aria-label="a dense table">
           <TableHead className="tableHeader">
@@ -101,6 +101,17 @@ function TablePage() {
               <TableCell className="tableHeaderCell"></TableCell>
             </TableRow>
           </TableHead>
+          {error && (
+            <TableRow>
+              <TableCell
+                colSpan={10}
+                align="center"
+                className="loadingIndicator"
+              >
+                <Typography color="error">{error}</Typography>
+              </TableCell>
+            </TableRow>
+          )}
           {loading ? (
             <TableRow>
               <TableCell
