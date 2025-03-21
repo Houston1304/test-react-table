@@ -1,4 +1,5 @@
 import { Button, Typography } from "@mui/material";
+import "./RemovePopUpStyle.css";
 
 function RemovePopUp({
   close,

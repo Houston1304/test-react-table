@@ -11,27 +11,3 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
-
-.autorizationForm {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-}
-
-.popUpBackground {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: #00000070;
-  overflow: hidden;
-  z-index: 4;
-}
-
-.exitContainer {
-  display: flex;
-  justify-content: flex-end;
-  padding: 10px;
-}

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import "./DataForm.css";
-import { TextField, Button, Container, Box } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+import "./FormDataStyle.css";
+import { TextField, Button, Container, Box, Typography } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -64,7 +65,7 @@ function DataForm({
           employeeSignatureName: changeData?.employeeSignatureName || "",
         }
   );
-
+  const [error, setError] = useState("");
   const [errors, setErrors] = useState<FormErrors>({});
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -122,19 +123,21 @@ function DataForm({
         dispatch(editRecord({ ...submissionData, id: formData.id }));
       }
       close(false);
-    } catch {}
+    } catch {
+      setError("Возникла ошибка. Попробуйте позже");
+    }
   };
-
-  useEffect(() => {
-    console.log(formData);
-  }, [formData]);
 
   return (
     <div className="popUpBackground">
       <div className="formPopUp">
-        <Button variant="contained" onClick={() => close(false)}>
-          Закрыть
-        </Button>
+        <div style={{ display: "flex", justifyContent: "flex-end" }}>
+          {" "}
+          <Button variant="contained" onClick={() => close(false)}>
+            <CloseIcon />
+          </Button>
+        </div>
+
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <Container maxWidth="sm">
             <Box
@@ -144,7 +147,7 @@ function DataForm({
               sx={{ mt: 3 }}
             >
               <DatePicker
-                label="companySigDate"
+                label="Дата подписи компании"
                 value={formData.companySigDate}
                 onChange={(date) => handleDateChange("companySigDate", date)}
                 slotProps={{
@@ -161,7 +164,7 @@ function DataForm({
               />
               <TextField
                 fullWidth
-                label="companySignatureName"
+                label="Имя подписавшего от компании"
                 name="companySignatureName"
                 value={formData.companySignatureName}
                 onChange={handleChange}
@@ -173,7 +176,7 @@ function DataForm({
               />
               <TextField
                 fullWidth
-                label="documentName"
+                label="Название документа"
                 name="documentName"
                 value={formData.documentName}
                 onChange={handleChange}
@@ -183,7 +186,7 @@ function DataForm({
               />
               <TextField
                 fullWidth
-                label="documentStatus"
+                label="Статус документа"
                 name="documentStatus"
                 value={formData.documentStatus}
                 onChange={handleChange}
@@ -193,7 +196,7 @@ function DataForm({
               />
               <TextField
                 fullWidth
-                label="documentType"
+                label="Тип документа"
                 name="documentType"
                 value={formData.documentType}
                 onChange={handleChange}
@@ -203,7 +206,7 @@ function DataForm({
               />
               <TextField
                 fullWidth
-                label="employeeNumber"
+                label="Номер сотрудника"
                 name="employeeNumber"
                 value={formData.employeeNumber}
                 onChange={handleChange}
@@ -212,7 +215,7 @@ function DataForm({
                 required
               />
               <DatePicker
-                label="employeeSigDate"
+                label="Дата подписи сотрудника"
                 value={formData.employeeSigDate}
                 onChange={(date) => handleDateChange("employeeSigDate", date)}
                 slotProps={{
@@ -229,7 +232,7 @@ function DataForm({
               />
               <TextField
                 fullWidth
-                label="employeeSignatureName"
+                label="Имя подписавшего сотрудника"
                 name="employeeSignatureName"
                 value={formData.employeeSignatureName}
                 onChange={handleChange}
@@ -239,7 +242,7 @@ function DataForm({
                 }
                 required
               />
-
+              {error && <Typography color="error">{error}</Typography>}
               <Button type="submit" fullWidth variant="contained">
                 Отправить
               </Button>

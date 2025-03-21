@@ -1,10 +1,12 @@
-import { Button, TextField, Typography } from "@mui/material";
-import AutorizationInput from "../components/Autorization/AutorizationInput";
+import { Button, CircularProgress, TextField, Typography } from "@mui/material";
+
 import { useState } from "react";
 import { useNavigate } from "react-router";
-import { login } from "../services/AutorizationApi";
+import { login } from "../../services/AutorizationApi";
+import "./AutorizationPageStyle.css";
 
 function AutorizationPage() {
+  const [loading, setLoading] = useState(false);
   const [username, setUsername] = useState("user");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -12,6 +14,7 @@ function AutorizationPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const token = await login(username, password);
 
@@ -24,8 +27,9 @@ function AutorizationPage() {
 
       navigate("/table");
     } catch (err) {
-      setError("Неверный логин или пароль");
+      setError("Возникла ошибка");
     }
+    setLoading(false);
   };
 
   function onUsernameChange(value: string) {
@@ -37,20 +41,27 @@ function AutorizationPage() {
   return (
     <div className="autorizationPage">
       <form className="autorizationForm" onSubmit={handleSubmit}>
+        <Typography fontSize={22}>Авторизация</Typography>
         {error && <Typography color="error">{error}</Typography>}
-        <AutorizationInput
+        <TextField
           label="Логин"
           value={username}
           onChange={(e) => onUsernameChange(e.target.value)}
         />
-        <AutorizationInput
+        <TextField
           label="Пароль"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <Button type="submit" variant="contained">
-          Войти
-        </Button>
+        {loading ? (
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <CircularProgress />
+          </div>
+        ) : (
+          <Button type="submit" variant="contained">
+            Войти
+          </Button>
+        )}
       </form>
     </div>
   );

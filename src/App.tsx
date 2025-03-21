@@ -1,6 +1,6 @@
-import { Navigate, Route, Routes, useNavigate } from "react-router";
-import AutorizationPage from "./pages/AutorizationPage";
-import TablePage from "./pages/TablePage";
+import { Route, Routes, useNavigate } from "react-router";
+import AutorizationPage from "./pages/AutorizationPage/AutorizationPage";
+import TablePage from "./pages/TablePage/TablePage";
 import { useEffect } from "react";
 
 function App() {
