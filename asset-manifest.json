@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.css": "/react-gh-pages/test-react-table/static/css/main.4afe08f5.css",
-    "main.js": "/react-gh-pages/test-react-table/static/js/main.cac6e372.js",
-    "index.html": "/react-gh-pages/test-react-table/index.html",
-    "main.4afe08f5.css.map": "/react-gh-pages/test-react-table/static/css/main.4afe08f5.css.map",
-    "main.cac6e372.js.map": "/react-gh-pages/test-react-table/static/js/main.cac6e372.js.map"
+    "main.css": "/test-react-table/static/css/main.4afe08f5.css",
+    "main.js": "/test-react-table/static/js/main.cac6e372.js",
+    "index.html": "/test-react-table/index.html",
+    "main.4afe08f5.css.map": "/test-react-table/static/css/main.4afe08f5.css.map",
+    "main.cac6e372.js.map": "/test-react-table/static/js/main.cac6e372.js.map"
   },
   "entrypoints": [
     "static/css/main.4afe08f5.css",
