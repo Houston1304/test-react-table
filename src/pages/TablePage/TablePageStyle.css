@@ -13,6 +13,13 @@
 .MuiTableCell-root.tableHeaderCell {
   color: white !important;
   font-weight: bold !important;
+  text-align: center;
+  cursor: pointer;
+}
+
+.tableHeaderCell:hover {
+  background-color: #103f6e !important;
+  transition: 0.25s;
 }
 
 .MuiTableRow-root.tableRow {

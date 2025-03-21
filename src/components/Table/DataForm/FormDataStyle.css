@@ -22,6 +22,6 @@
 
 .formPopUp .MuiTextField-root,
 .formPopUp .MuiDatePicker-root {
-  margin-top: 0; /* Отступ для кнопки */
-  margin-bottom: 16px; /* Отступ между полями */
+  margin-top: 0;
+  margin-bottom: 16px;
 }

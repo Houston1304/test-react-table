@@ -33,12 +33,13 @@ function TablePage() {
   const [openForm, setOpenForm] = useState(false);
   const [removePop, setRemovePop] = useState(false);
   const [removeID, setRemoveID] = useState("");
+  const [sortField, setSortField] = useState<string | null>(null);
+  const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
 
   useEffect(() => {
     const loadData = async () => {
       try {
         const tableData = await fetchTableData();
-
         dispatch(setData(tableData));
       } catch (err) {
         setError("Не удалось загрузить данные");
@@ -52,7 +53,6 @@ function TablePage() {
   async function removeTableRecord(id: string) {
     try {
       await removeData(id);
-
       dispatch(removeRecord(id));
     } catch (err) {
       setError("Не удалось удалить данные");
@@ -63,6 +63,27 @@ function TablePage() {
     localStorage.clear();
     navigate("/");
   }
+
+  const handleSort = (field: string) => {
+    if (sortField === field) {
+      setSortDirection(sortDirection === "asc" ? "desc" : "asc");
+    } else {
+      setSortField(field);
+      setSortDirection("asc");
+    }
+  };
+
+  const sortedData = sortField
+    ? [...data].sort((a, b) => {
+        if (a[sortField] < b[sortField]) {
+          return sortDirection === "asc" ? -1 : 1;
+        }
+        if (a[sortField] > b[sortField]) {
+          return sortDirection === "asc" ? 1 : -1;
+        }
+        return 0;
+      })
+    : data;
 
   return (
     <div>
@@ -75,27 +96,69 @@ function TablePage() {
         <Table size="small" aria-label="a dense table">
           <TableHead className="tableHeader">
             <TableRow>
-              <TableCell className="tableHeaderCell">
-                Дата подписи компании
+              <TableCell
+                className="tableHeaderCell"
+                onClick={() => handleSort("companySigDate")}
+              >
+                Дата подписи компании{" "}
+                {sortField === "companySigDate" &&
+                  (sortDirection === "asc" ? "▲" : "▼")}
               </TableCell>
-              <TableCell className="tableHeaderCell">
-                Имя подписавшего от компании
+              <TableCell
+                className="tableHeaderCell"
+                onClick={() => handleSort("companySignatureName")}
+              >
+                Имя подписавшего от компании{" "}
+                {sortField === "companySignatureName" &&
+                  (sortDirection === "asc" ? "▲" : "▼")}
               </TableCell>
-              <TableCell className="tableHeaderCell">
-                Название документа
+              <TableCell
+                className="tableHeaderCell"
+                onClick={() => handleSort("documentName")}
+              >
+                Название документа{" "}
+                {sortField === "documentName" &&
+                  (sortDirection === "asc" ? "▲" : "▼")}
               </TableCell>
-              <TableCell className="tableHeaderCell">
-                Статус документа
+              <TableCell
+                className="tableHeaderCell"
+                onClick={() => handleSort("documentStatus")}
+              >
+                Статус документа{" "}
+                {sortField === "documentStatus" &&
+                  (sortDirection === "asc" ? "▲" : "▼")}
               </TableCell>
-              <TableCell className="tableHeaderCell">Тип документа</TableCell>
-              <TableCell className="tableHeaderCell">
-                Номер сотрудника
+              <TableCell
+                className="tableHeaderCell"
+                onClick={() => handleSort("documentType")}
+              >
+                Тип документа{" "}
+                {sortField === "documentType" &&
+                  (sortDirection === "asc" ? "▲" : "▼")}
               </TableCell>
-              <TableCell className="tableHeaderCell">
-                Дата подписи сотрудника
+              <TableCell
+                className="tableHeaderCell"
+                onClick={() => handleSort("employeeNumber")}
+              >
+                Номер сотрудника{" "}
+                {sortField === "employeeNumber" &&
+                  (sortDirection === "asc" ? "▲" : "▼")}
               </TableCell>
-              <TableCell className="tableHeaderCell">
-                Имя подписавшего сотрудника
+              <TableCell
+                className="tableHeaderCell"
+                onClick={() => handleSort("employeeSigDate")}
+              >
+                Дата подписи сотрудника{" "}
+                {sortField === "employeeSigDate" &&
+                  (sortDirection === "asc" ? "▲" : "▼")}
+              </TableCell>
+              <TableCell
+                className="tableHeaderCell"
+                onClick={() => handleSort("employeeSignatureName")}
+              >
+                Имя подписавшего сотрудника{" "}
+                {sortField === "employeeSignatureName" &&
+                  (sortDirection === "asc" ? "▲" : "▼")}
               </TableCell>
               <TableCell className="tableHeaderCell"></TableCell>
               <TableCell className="tableHeaderCell"></TableCell>
@@ -124,7 +187,7 @@ function TablePage() {
             </TableRow>
           ) : (
             <TableBody>
-              {data.map((row: TableRowInterface) => (
+              {sortedData.map((row: TableRowInterface) => (
                 <TableRow key={row.id} className="tableRow">
                   <TableCell>{row.companySigDate}</TableCell>
                   <TableCell>{row.companySignatureName}</TableCell>
