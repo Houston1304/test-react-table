@@ -6,6 +6,8 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs, { Dayjs } from "dayjs";
 import { addData } from "../../services/AddDataApi";
+import { useDispatch } from "react-redux";
+import { addRecord } from "../../reducers/TableSlice";
 
 interface FormData {
   companySigDate: Dayjs | null;
@@ -23,6 +25,7 @@ interface FormErrors {
 }
 
 function AddDataForm({ close }: { close: (arg: boolean) => void }) {
+  const dispatch = useDispatch();
   const [formData, setFormData] = useState<FormData>({
     companySigDate: null,
     companySignatureName: "",
@@ -33,7 +36,6 @@ function AddDataForm({ close }: { close: (arg: boolean) => void }) {
     employeeSigDate: null,
     employeeSignatureName: "",
   });
-
   const [errors, setErrors] = useState<FormErrors>({});
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -79,7 +81,9 @@ function AddDataForm({ close }: { close: (arg: boolean) => void }) {
         companySigDate: formData.companySigDate?.toISOString(),
         employeeSigDate: formData.employeeSigDate?.toISOString(),
       };
-      addData(submissionData);
+      await addData(submissionData);
+
+      dispatch(addRecord(submissionData));
     }
   };
 

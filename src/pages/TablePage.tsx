@@ -12,6 +12,8 @@ import {
   TableRow,
 } from "@mui/material";
 import AddDataForm from "../components/Table/AddDataForm";
+import { useDispatch, useSelector } from "react-redux";
+import { setData } from "../reducers/TableSlice";
 
 interface TableRowType {
   id: string;
@@ -26,7 +28,8 @@ interface TableRowType {
 }
 
 function TablePage() {
-  const [data, setData] = useState([]);
+  const dispatch = useDispatch();
+  const data = useSelector((state: any) => state.table.data);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [openForm, setOpenForm] = useState(false);
@@ -35,7 +38,7 @@ function TablePage() {
     const loadData = async () => {
       try {
         const tableData = await fetchTableData();
-        setData(tableData);
+        dispatch(setData(tableData));
       } catch (err) {
         setError("Не удалось загрузить данные");
       }
