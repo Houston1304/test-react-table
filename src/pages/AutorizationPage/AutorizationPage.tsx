@@ -49,6 +49,7 @@ function AutorizationPage() {
           onChange={(e) => onUsernameChange(e.target.value)}
         />
         <TextField
+          type="password"
           label="Пароль"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
