@@ -26,6 +26,10 @@
   transition: background-color 0.3s ease;
 }
 
+.MuiTableCell-root {
+  text-align: center !important;
+}
+
 .MuiTableRow-root.tableRow:nth-child(even) {
   background-color: #f5f5f5;
 }

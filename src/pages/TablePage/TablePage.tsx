@@ -160,8 +160,8 @@ function TablePage() {
                 {sortField === "employeeSignatureName" &&
                   (sortDirection === "asc" ? "▲" : "▼")}
               </TableCell>
-              <TableCell className="tableHeaderCell"></TableCell>
-              <TableCell className="tableHeaderCell"></TableCell>
+              <TableCell className="emptyTableHeaderCell"></TableCell>
+              <TableCell className="emptyTableHeaderCell"></TableCell>
             </TableRow>
           </TableHead>
           {error && (
